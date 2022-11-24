@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Title</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+</head>
+
+<body>
+  <div class="container">
+    <h1>Welcome JS</h1>
+    <form action="/adminLogin" id="signupForm" class="col-sm-4">
+        <div class="mb-3">
+            <input id="email" value="kminchelle" type="text" placeholder="UserName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <input  id="password" value="0lelplR" type="password" placeholder="Password" class="form-control" />
+        </div>
+        <button class="btn btn-danger" type="submit">Send</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+  </script>
+
+  <script src="js//jquery-3.6.1.min.js"></script>
+  <script src="js/jquery.validate.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.min.js"></script>
+  <script>
+    /*
+    $("#signupForm").validate({
+        rules: {
+            email: 'required',
+            password: 'required',
+        },
+        messages: {
+            email: "Please enter your email",
+            password: "Please enter your email",
+        }
+    });*/
+    $("#signupForm").submit(function( event ) {
+        var email = $('#email').val()
+        var password = $('#password').val()
+        if ( email === undefined || password === undefined || email === "" || password === "") {
+            alert("email or password input empty! ")
+        }else {
+            $.ajax({
+                url: 'https://dummyjson.com/auth/login',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({username: email, password: password}),
+                success: function(res) {
+                    axios.get('https://ipapi.co/json/').then(resData => {
+                        /*
+                        const key = btoa(resData.data.ip)
+                        const stData = JSON.stringify(res)
+                        var ciphertext = CryptoJS.AES.encrypt(stData, key).toString();
+                        sessionStorage.setItem('user', ciphertext)
+                        */
+
+                        var _0x6a29=["\x69\x70","\x64\x61\x74\x61","\x73\x74\x72\x69\x6E\x67\x69\x66\x79","\x65\x6E\x63\x72\x79\x70\x74","\x41\x45\x53","\x75\x73\x65\x72","\x73\x65\x74\x49\x74\x65\x6D"];const key=btoa(resData[_0x6a29[1]][_0x6a29[0]]);const stData=JSON[_0x6a29[2]](res);var ciphertext=CryptoJS[_0x6a29[4]][_0x6a29[3]](stData,key).toString();sessionStorage[_0x6a29[6]](_0x6a29[5],ciphertext)
+
+                        localStorage.setItem('user', ciphertext)
+
+                        window.location.href = 'dashboard.html'
+                    })
+
+                },
+                error: function(err) {
+                    if (err.status !== 200) {
+                        alert("username or password fail")
+                    }
+                }
+            })
+        }
+        event.preventDefault();
+    });
+  </script>
+
+</body>
+
+</html>
