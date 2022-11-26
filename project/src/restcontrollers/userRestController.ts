@@ -1,6 +1,7 @@
 import express from 'express'
 import { userLogin, userRegister } from '../services/userService'
 import { IRest } from '../utils/IRest'
+import { decrypt } from '../utils/util'
 export const userRestController = express.Router()
 
 userRestController.post('/register', async (req, res) => {
@@ -36,11 +37,18 @@ userRestController.post('/login', async (req, res) => {
         status: false,
         result: undefined
     }
-    await userLogin(email, password).then(userItem => {
+    await userLogin(email).then(userItem => {
         if (userItem) {
             sendItem.status = true
             sendItem.result = userItem
-            res.status(200).json(sendItem)
+            const plainPass = decrypt(userItem.password!)
+            if (plainPass === password) {
+                req.session.userID = userItem.id
+                res.status(200).json(sendItem)
+            }else {
+                sendItem.result = 'email or password not valid'
+                res.status(400).json(sendItem)
+            }
         }else {
             sendItem.result = 'email or password not valid'
             res.status(400).json(sendItem)

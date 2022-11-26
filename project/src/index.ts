@@ -1,7 +1,23 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import mongoSanitize from 'express-mongo-sanitize'
+import * as dotenv from 'dotenv'
+dotenv.config()
+import session from 'express-session'
 const app = express()
+
+// session config
+declare module 'express-session' {
+    interface SessionData {
+        userID:string
+    }
+}
+const sessionConfig = {
+    secret: 'appSession',
+    resave: false,
+    saveUninitialized: true,
+}
+app.use(session(sessionConfig))
 
 // body-parser config
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -18,11 +34,12 @@ app.use(
     }),
   );
 
-
 // api import
 import { userRestController } from './restcontrollers/userRestController'
+import { noteRestController } from './restcontrollers/noteRestController'
 app.use('/api/v1', [
-    userRestController
+    userRestController,
+    noteRestController
 ])
 
 const port = 8080
